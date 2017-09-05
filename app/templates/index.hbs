@@ -1,0 +1,17 @@
+<button {{action 'import'}}>import</button><br>
+<button {{action 'importMixed'}}>importMixed</button><br>
+<button {{action 'importNew'}}>importNew</button><br>
+<button {{action 'unloadAll'}}>unloadAll</button><br>
+
+<h3>
+ember data example
+</h3>
+post.comments.length: {{model.comments.length}}<br>
+commentsCount {{commentsCount}}<br>
+comments.length {{comments.length}}<br>
+
+comments.each IDS:<br>
+{{#each comments as |comment|}}
+  <br>
+  {{comment.id}}
+{{/each}}
