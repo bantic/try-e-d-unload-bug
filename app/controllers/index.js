@@ -13,6 +13,10 @@ export default Ember.Controller.extend({
     this.store.unloadAll('comment');
   },
 
+  init() {
+    this._super(...arguments);
+  },
+
   loadComments(set=true) {
     let post = this.get('model');
     let comments = this.store.peekAll('comment');
@@ -51,6 +55,34 @@ export default Ember.Controller.extend({
       this.unloadAll();
       this.loadComments();
       Ember.run.next(() => this.loadComments(false));
+    },
+    reproBug() {
+      let post = this.get('model');
+      let allComments = this.store.peekAll('comment');
+      Ember.run(() => {
+        this.store.pushPayload(createPayload([1,2]));
+      });
+      Ember.run(() => {
+        this.store.peekAll('comment').forEach(comment => {
+          if (!comment) { return; }
+          comment.set('post', post);
+        });
+      });
+      Ember.run(() => this.store.unloadAll('comment'));
+      Ember.run(() => {
+        this.store.pushPayload(createPayload([1,2]));
+      });
+      Ember.run(() => {
+        this.store.peekAll('comment').forEach(comment => {
+          if (!comment) { return; }
+          comment.set('post', post);
+        });
+      });
+      Ember.run(() => this.store.unloadAll('comment'));
+      console.log('stored peekAll(comment).length', allComments.get('length'));
+      console.log('post.comments.length',post.get('comments.length'));
+      console.log('peekAll(comment).length', this.store.peekAll('comment').get('length'));
+      console.log('internalRecords fro comment.length', this.store._internalModelsFor('comment').length);
     }
   }
 });
